@@ -136,6 +136,8 @@ dist
 tmp
 /out-tsc
 
+hide/
+
 # dependencies
 node_modules
 
