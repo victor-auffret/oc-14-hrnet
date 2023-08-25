@@ -55,3 +55,16 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 - [Join the community](https://nx.dev/community)
 - [Subscribe to the Nx Youtube Channel](https://www.youtube.com/@nxdevtools)
 - [Follow us on Twitter](https://twitter.com/nxdevtools)
+
+## CHOIX TECHNIQUES 
+
+- nx pour le monorepo 
+- workspace pour projets (react app, jquery app, react pluggin, jquery pluggin)
+- storybook pour générer la documentation 
+- dossier "hide" avec les ressources du projet pour travailler hors ligne 
+- 
+
+1) charge données du storage 
+2) rempli etat 
+3) affiche etat 
+
