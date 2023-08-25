@@ -1,6 +1,8 @@
 import { FunctionComponent, useCallback } from 'react';
-import { SelectStateComponent } from "../../components/select-state"
 import { NavLink } from 'react-router-dom';
+
+import { SelectStateComponent } from "../../components/select-state"
+import { states } from "../../utils/states"
 
 interface IProps {
 }
@@ -8,6 +10,34 @@ interface IProps {
 const PageHome: FunctionComponent<IProps> = (props: IProps) => {
 
  const saveEmployee = useCallback(() => {
+
+  /*
+   const firstName = document.getElementById('first-name');
+    const lastName = document.getElementById('last-name');
+    const dateOfBirth = document.getElementById('date-of-birth');
+    const startDate = document.getElementById('start-date');
+    const department = document.getElementById('department');
+    const street = document.getElementById('street');
+    const city = document.getElementById('city');
+    const state = document.getElementById('state');
+    const zipCode = document.getElementById('zip-code');
+
+    const employees = JSON.parse(localStorage.getItem('employees')) || [];
+    const employee = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        dateOfBirth: dateOfBirth.value,
+        startDate: startDate.value,
+        department: department.value,
+        street: street.value,
+        city: city.value,
+        state: state.value,
+        zipCode: zipCode.value
+    };
+    employees.push(employee);
+    localStorage.setItem('employees', JSON.stringify(employees));
+    $('#confirmation').modal();
+  */
 
  }, [])
  return <>
@@ -17,6 +47,7 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
   <div className="container">
    <NavLink className={`error-back`} to={'/employes'}> View Current Employees </NavLink>
    <h2>Create Employee</h2>
+
    <form action="#" id="create-employee">
     <label htmlFor="first-name">First Name</label>
     <input type="text" id="first-name" />
@@ -35,7 +66,7 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
      <input id="city" type="text" />
 
      <label htmlFor="state">State</label>
-     <SelectStateComponent />
+     <SelectStateComponent states={states} />
 
      <label htmlFor="zip-code">Zip Code</label>
      <input id="zip-code" type="number" />
