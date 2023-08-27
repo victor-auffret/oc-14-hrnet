@@ -1,4 +1,4 @@
-import { FunctionComponent, useMemo, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 // import { NavLink } from 'react-router-dom';
 
 import "./index.css"
@@ -17,23 +17,45 @@ const SHOW = [10, 25, 50, 100]
 
 const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
 
- console.log(props)
+ const [tri, setTri] = useState({ prop: "", desc: true })
 
- const [tri, setTri] = useState("")
- const [desc, setDesc] = useState(false)
+ // TODO : filtres search
 
  const data = useMemo(() => {
-  return props.data.sort((a, b) => {
-   const order = desc ? 1 : -1
-   if (a[tri] < b[tri]) {
-    return -order
-   }
-   if (a[tri] > b[tri]) {
-    return order
+
+  let order = props.data.sort((a, b) => {
+   if (tri.prop in a && tri.prop in b) {
+    if (a[tri.prop] < b[tri.prop]) {
+     return 1
+    }
+    if (a[tri.prop] > b[tri.prop]) {
+     return -1
+    }
    }
    return 0
   })
- }, [props.data, tri, desc])
+  return tri.desc ? order : order.reverse()
+ }, [props.data, tri.desc, tri.prop, tri])
+
+ const tableauTri = useMemo(() => {
+  const up = (title: string) => {
+   return () => setTri({ prop: title, desc: true })
+  }
+  const down = (title: string) => {
+   return () => setTri({ prop: title, desc: false })
+  }
+  return (<thead>
+   <tr>
+    {
+     props.columns.map(cols => (<th scope="col">
+      {cols.title}
+      <button onClick={up(cols.data)}> UP </button>
+      <button onClick={down(cols.data)}> DOWN </button>
+     </th>))
+    }
+   </tr>
+  </thead>)
+ }, [])
 
  return <div>
   <header>
@@ -54,23 +76,21 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
   <div>
 
    <table id="employee-table" className="display">
-    <thead>
-     <tr>
+
+    {tableauTri}
+
+    {
+     <tbody>
       {
-       props.columns.map(cols => (<th scope="col">{cols.title}</th>))
+       data.map(emp => (
+        <tr>
+         {props.columns.map(col => (<td>{emp[col.data]}</td>))}
+        </tr>
+       ))
       }
-     </tr>
-    </thead>
-    <tbody>
-     DONNES
-     {
-      data.map(emp => (
-       <tr>
-        {props.columns.map(col => (<td>{emp[col.data]}</td>))}
-       </tr>
-      ))
-     }
-    </tbody>
+     </tbody>
+    }
+
     <tfoot>
      <p> Showing 0 to 0 of 0 entries </p>
      <nav>
@@ -81,7 +101,7 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
    </table>
 
   </div>
- </div>
+ </div >
 }
 
 export { DataTableComponent }
