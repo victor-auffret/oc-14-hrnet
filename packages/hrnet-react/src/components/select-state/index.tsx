@@ -8,11 +8,12 @@ interface IState {
 }
 
 interface IProps {
- states: IState[]
+ states: IState[],
+ childRef: any
 }
 
 const SelectStateComponent: FunctionComponent<IProps> = (props: IProps) => {
- return <select name="state" id="state">
+ return <select name="state" id="state" ref={props.childRef}>
   {props.states.map(e => <option value={e.abbreviation}>{e.name}</option>)}
  </select>
 }

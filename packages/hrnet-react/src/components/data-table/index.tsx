@@ -1,5 +1,5 @@
 import { FunctionComponent, useMemo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+// import { NavLink } from 'react-router-dom';
 
 import "./index.css"
 
@@ -17,6 +17,8 @@ const SHOW = [10, 25, 50, 100]
 
 const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
 
+ console.log(props)
+
  const [tri, setTri] = useState("")
  const [desc, setDesc] = useState(false)
 
@@ -31,7 +33,7 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
    }
    return 0
   })
- }, [props.data, props.columns, tri, desc])
+ }, [props.data, tri, desc])
 
  return <div>
   <header>
@@ -54,11 +56,20 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
    <table id="employee-table" className="display">
     <thead>
      <tr>
-      {props.columns.map(cols => (<th scope="col">{cols.title}</th>))}
+      {
+       props.columns.map(cols => (<th scope="col">{cols.title}</th>))
+      }
      </tr>
     </thead>
     <tbody>
      DONNES
+     {
+      data.map(emp => (
+       <tr>
+        {props.columns.map(col => (<td>{emp[col.data]}</td>))}
+       </tr>
+      ))
+     }
     </tbody>
     <tfoot>
      <p> Showing 0 to 0 of 0 entries </p>

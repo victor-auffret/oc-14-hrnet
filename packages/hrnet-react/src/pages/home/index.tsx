@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback } from 'react';
+import { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { SelectStateComponent } from "../../components/select-state"
@@ -7,85 +7,118 @@ import { states } from "../../utils/states"
 interface IProps {
 }
 
+interface IEmployee {
+
+}
+
 const PageHome: FunctionComponent<IProps> = (props: IProps) => {
 
- const saveEmployee = useCallback(() => {
-
   /*
-   const firstName = document.getElementById('first-name');
-    const lastName = document.getElementById('last-name');
-    const dateOfBirth = document.getElementById('date-of-birth');
-    const startDate = document.getElementById('start-date');
-    const department = document.getElementById('department');
-    const street = document.getElementById('street');
-    const city = document.getElementById('city');
-    const state = document.getElementById('state');
-    const zipCode = document.getElementById('zip-code');
-
-    const employees = JSON.parse(localStorage.getItem('employees')) || [];
-    const employee = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        dateOfBirth: dateOfBirth.value,
-        startDate: startDate.value,
-        department: department.value,
-        street: street.value,
-        city: city.value,
-        state: state.value,
-        zipCode: zipCode.value
-    };
-    employees.push(employee);
-    localStorage.setItem('employees', JSON.stringify(employees));
-    $('#confirmation').modal();
+  { title: 'First Name', data: 'firstName' },
+            { title: 'Last Name', data: 'lastName' },
+            { title: 'Start Date', data: 'startDate' },
+            { title: 'Department', data: 'department' },
+            { title: 'Date of Birth', data: 'dateOfBirth' },
+            { title: 'Street', data: 'street' },
+            { title: 'City', data: 'city' },
+            { title: 'State', data: 'state' },
+            { title: 'Zip Code', data: 'zipCode' },
   */
 
- }, [])
- return <>
-  <div className="title">
-   <h1>HRnet</h1>
-  </div>
-  <div className="container">
-   <NavLink className={`error-back`} to={'/employes'}> View Current Employees </NavLink>
-   <h2>Create Employee</h2>
+  const firstName = useRef<HTMLInputElement>(null)
+  const lastName = useRef<HTMLInputElement>(null)
+  const startDate = useRef<HTMLInputElement>(null)
+  const department = useRef<HTMLSelectElement>(null)
+  const dateOfBirth = useRef<HTMLInputElement>(null)
+  const street = useRef<HTMLInputElement>(null)
+  const city = useRef<HTMLInputElement>(null)
+  const state = useRef<HTMLSelectElement>(null)
+  const zipCode = useRef<HTMLInputElement>(null)
 
-   <form action="#" id="create-employee">
-    <label htmlFor="first-name">First Name</label>
-    <input type="text" id="first-name" />
-    <label htmlFor="last-name">Last Name</label>
-    <input type="text" id="last-name" />
-    <label htmlFor="date-of-birth">Date of Birth</label>
-    <input id="date-of-birth" type="text" />
-    <label htmlFor="start-date">Start Date</label>
-    <input id="start-date" type="text" />
+  const [employees, setEmployees] = useState<IEmployee[]>([])
 
-    <fieldset className="address">
-     <legend>Address</legend>
-     <label htmlFor="street">Street</label>
-     <input id="street" type="text" />
-     <label htmlFor="city">City</label>
-     <input id="city" type="text" />
+  useEffect(() => {
+    let save = globalThis.localStorage.getItem('employees')
+    if (save != null) {
+      setEmployees(JSON.parse(save))
+    }
+  }, [])
 
-     <label htmlFor="state">State</label>
-     <SelectStateComponent states={states} />
+  const saveEmployee = useCallback(
+    () => {
 
-     <label htmlFor="zip-code">Zip Code</label>
-     <input id="zip-code" type="number" />
-    </fieldset>
+      const employee: IEmployee = {
+        firstName: firstName.current?.value ?? null,
+        lastName: lastName.current?.value ?? null,
+        dateOfBirth: dateOfBirth.current?.value ?? null,
+        startDate: startDate.current?.value ?? null,
+        department: department.current?.value ?? null,
+        street: street.current?.value ?? null,
+        city: city.current?.value ?? null,
+        state: state.current?.value ?? null,
+        zipCode: zipCode.current?.value ?? null
+      };
 
-    <label htmlFor="department">Department</label>
-    <select name="department" id="department">
-     <option>Sales</option>
-     <option>Marketing</option>
-     <option>Engineering</option>
-     <option>Human Resources</option>
-     <option>Legal</option>
-    </select>
-   </form>
+      setEmployees(old => [...old, employee])
+      globalThis.localStorage.setItem('employees', JSON.stringify(employees));
 
-   <button onClick={saveEmployee}>Save</button>
-  </div>
-  <div id="confirmation" className="modal">Employee Created!</div>
- </>
+    },
+    [employees]
+  );
+
+  return <>
+    <div className="title">
+      <h1>HRnet</h1>
+    </div>
+    <div className="container">
+      <NavLink className={`error-back`} to={'/employes'}> View Current Employees </NavLink>
+      <h2>Create Employee</h2>
+
+      <form action="#" id="create-employee">
+
+        <label htmlFor="first-name">First Name</label>
+        <input type="text" id="first-name" ref={firstName} />
+
+        <label htmlFor="last-name">Last Name</label>
+        <input type="text" id="last-name" ref={lastName} />
+
+        <label htmlFor="date-of-birth">Date of Birth</label>
+        <input id="date-of-birth" type="text" ref={dateOfBirth} />
+
+        <label htmlFor="start-date">Start Date</label>
+        <input id="start-date" type="text" ref={startDate} />
+
+        <fieldset className="address">
+          <legend>Address</legend>
+
+          <label htmlFor="street">Street</label>
+          <input id="street" type="text" ref={street} />
+
+          <label htmlFor="city">City</label>
+          <input id="city" type="text" ref={city} />
+
+          <label htmlFor="state">State</label>
+          <SelectStateComponent states={states} childRef={state} />
+
+          <label htmlFor="zip-code">Zip Code</label>
+          <input id="zip-code" type="number" ref={zipCode} />
+
+        </fieldset>
+
+        <label htmlFor="department">Department</label>
+        <select name="department" id="department" ref={department} >
+          <option>Sales</option>
+          <option>Marketing</option>
+          <option>Engineering</option>
+          <option>Human Resources</option>
+          <option>Legal</option>
+        </select>
+      </form>
+
+      <button onClick={saveEmployee}>Save</button>
+    </div>
+    <div id="confirmation" className="modal">Employee Created!</div>
+  </>
 }
 
 export { PageHome }
