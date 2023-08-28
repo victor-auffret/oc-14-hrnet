@@ -13,18 +13,6 @@ interface IEmployee {
 
 const PageHome: FunctionComponent<IProps> = (props: IProps) => {
 
-  /*
-  { title: 'First Name', data: 'firstName' },
-            { title: 'Last Name', data: 'lastName' },
-            { title: 'Start Date', data: 'startDate' },
-            { title: 'Department', data: 'department' },
-            { title: 'Date of Birth', data: 'dateOfBirth' },
-            { title: 'Street', data: 'street' },
-            { title: 'City', data: 'city' },
-            { title: 'State', data: 'state' },
-            { title: 'Zip Code', data: 'zipCode' },
-  */
-
   const firstName = useRef<HTMLInputElement>(null)
   const lastName = useRef<HTMLInputElement>(null)
   const startDate = useRef<HTMLInputElement>(null)
@@ -83,10 +71,10 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
         <input type="text" id="last-name" ref={lastName} />
 
         <label htmlFor="date-of-birth">Date of Birth</label>
-        <input id="date-of-birth" type="text" ref={dateOfBirth} />
+        <input id="date-of-birth" type="date" ref={dateOfBirth} />
 
         <label htmlFor="start-date">Start Date</label>
-        <input id="start-date" type="text" ref={startDate} />
+        <input id="start-date" type="date" ref={startDate} />
 
         <fieldset className="address">
           <legend>Address</legend>
