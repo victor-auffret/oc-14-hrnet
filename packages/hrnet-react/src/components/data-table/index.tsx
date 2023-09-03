@@ -1,7 +1,8 @@
-import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useMemo, useState } from 'react';
 // import { NavLink } from 'react-router-dom';
 
 import "./index.css"
+import { usePagination } from './hoock';
 
 interface IColumn {
  title: string,
@@ -18,6 +19,14 @@ const SHOW = [10, 25, 50, 100]
 const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
 
  const [tri, setTri] = useState({ prop: "", desc: true })
+
+ const [maxPerPageIndex, setMaxPerPageIndex] = useState(0)
+
+ const maxPage = useMemo(() => {
+  return Number(Math.round(props.data.length / SHOW[maxPerPageIndex]))
+ }, [maxPerPageIndex, props.data.length])
+
+ const { currentPage, prev, next, canPrev, canNext } = usePagination({ currentPage: 0, maxPage })
 
  // TODO : filtres search
 
@@ -92,10 +101,11 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
     }
 
     <tfoot>
-     <p> Showing 0 to 0 of 0 entries </p>
+     <p> Showing 0 to 0 of {props.data.length} entries </p>
      <nav>
-      <button>Previous</button>
-      <button>Next</button>
+      <button onClick={prev} disabled={!canPrev}>Previous</button>
+      <span> {currentPage + 1} </span>
+      <button onClick={next} disabled={!canNext}>Next</button>
      </nav>
     </tfoot>
    </table>
