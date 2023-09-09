@@ -6,10 +6,11 @@ interface IPageOption {
 }
 
 const usePagination = (pageOption: IPageOption) => {
+	const [maxPerPage, setMaxPerPage] = useState(pageOption.maxPage)
  const [currentPage, setCurrentPage] = useState(pageOption.currentPage)
 
  const canPrev = useMemo(() => currentPage > 0, [currentPage])
- const canNext = useMemo(() => currentPage + 1 < pageOption.maxPage, [currentPage, pageOption.maxPage])
+ const canNext = useMemo(() => currentPage + 1 < pageOption.maxPage, [currentPage, maxPerPage])
 
  const prev = useCallback(() => {
   if (canPrev) {
@@ -23,7 +24,7 @@ const usePagination = (pageOption: IPageOption) => {
   }
  }, [canNext])
 
- return { currentPage, prev, next, canPrev, canNext }
+ return { currentPage, prev, next, canPrev, canNext, setMaxPerPage }
 }
 
 export { usePagination }

@@ -1,8 +1,11 @@
-import { FunctionComponent, useMemo, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 // import { NavLink } from 'react-router-dom';
+import { ToogleSortBtn } from "./toogle-sort";
+import { usePagination } from './hoock';
 
 import "./index.css"
-import { usePagination } from './hoock';
+
+const SHOW = [10, 25, 50, 100]
 
 interface IColumn {
  title: string,
@@ -11,12 +14,26 @@ interface IColumn {
 
 interface IProps {
  data: any[],
- columns: IColumn[]
+ columns: IColumn[],
+ listNbPerPage: number[]
 }
 
-const SHOW = [10, 25, 50, 100]
+// TODO 
 
-const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
+/*
+1) récupérer tout les élements du storage 
+2) sauvegarder ces éléments dans un state 
+3) appliquer un tri (sort) sur ces éléments 
+4) appliquer un filtre sur ces éléments (search)
+5) appliquer le système de pagination
+6) afficher le résultat
+*/
+
+const DataTableComponent: FunctionComponent<IProps> = (props: IProps = {
+ data: [],
+ columns: [],
+ listNbPerPage: SHOW
+}) => {
 
  const [tri, setTri] = useState({ prop: "", desc: true })
 
@@ -29,10 +46,31 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
  const { currentPage, prev, next, canPrev, canNext } = usePagination({ currentPage: 0, maxPage })
 
  // TODO : filtres search
+ const [search, setSearch] = useState("")
 
- const data = useMemo(() => {
+ const handleSearch = (e: any) => setSearch(e.target.value)
 
-  let order = props.data.sort((a, b) => {
+ const filtredResult = useMemo(() => {
+  if (search == "") {
+   return props.data
+  }
+  let res = []
+  for (let i = 0; i < props.data.length; i++) {
+   let trouve = false
+   for (const [key, value] of Object.entries<string>(props.data[i])) {
+    if (!trouve && value.toLowerCase().includes(search.toLowerCase())) {
+     res.push(props.data[i])
+     trouve = true
+     break;
+    }
+   }
+  }
+  return res
+ }, [search, props.data])
+
+ const sortedResult = useMemo(() => {
+
+  let order = filtredResult.sort((a, b) => {
    if (tri.prop in a && tri.prop in b) {
     if (a[tri.prop] < b[tri.prop]) {
      return 1
@@ -44,23 +82,39 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
    return 0
   })
   return tri.desc ? order : order.reverse()
- }, [props.data, tri.desc, tri.prop, tri])
+ }, [filtredResult, tri.desc, tri.prop, tri])
 
  const tableauTri = useMemo(() => {
-  const up = (title: string) => {
-   return () => setTri({ prop: title, desc: true })
-  }
-  const down = (title: string) => {
-   return () => setTri({ prop: title, desc: false })
+
+  const toogleSort = (title: string) => {
+   return () => setTri((t) => {
+    document.querySelectorAll(".sorting, .sorting_asc, .sorting_desc").forEach(e => {
+     e.classList.remove("sorting_asc")
+     e.classList.remove("sorting_desc")
+     e.classList.remove("sorting")
+     if (e.id != `col-${title.toLowerCase().split(" ").join("-")}`) {
+      e.classList.add("sorting")
+     } else {
+      const suffix = t.desc ? "_desc" : "_asc"
+      e.classList.add(`sorting${suffix}`)
+     }
+    })
+    return { prop: title, desc: !t.desc }
+   })
   }
   return (<thead>
    <tr>
     {
-     props.columns.map(cols => (<th scope="col">
+     props.columns.map((cols, i) => (<th
+      scope="col"
+      key={`col-${i}`}
+      id={`col-${cols.title.toLowerCase().split(" ").join("")}`}
+      className={`sorting${cols.title != tri.prop ? "" : (tri.desc ? "_desc" : "_asc")}`}
+      onClick={toogleSort(cols.data)}
+     >
       {cols.title}
-      <button onClick={up(cols.data)}> UP </button>
-      <button onClick={down(cols.data)}> DOWN </button>
-     </th>))
+     </th>)
+     )
     }
    </tr>
   </thead>)
@@ -71,28 +125,28 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps) => {
    <nav>
     <form action="#">
      <label htmlFor='show'>Show</label>
-     <select name="show" id="show">
-      {SHOW.map(n => <option value={n}> {n} </option>)}
+     <select name="show" id="show" onChange={(e) => setMaxPerPageIndex(Number(e.target.value))}>
+      {SHOW.map((n, i) => <option value={i}> {n} </option>)}
      </select>
      entries
 
      <label htmlFor="search">Search: </label>
-     <input type="text" name="search" id="search" />
+     <input type="text" name="search" id="search" onChange={handleSearch} />
     </form>
    </nav>
   </header>
 
   <div>
 
-   <table id="employee-table" className="display">
+   <table id="employee-table" className="display dataTable">
 
     {tableauTri}
 
     {
      <tbody>
       {
-       data.map(emp => (
-        <tr>
+       sortedResult.map((emp, i) => (
+        <tr role="row" className={`${i % 2 == 0 ? "odd" : "even"}`}>
          {props.columns.map(col => (<td>{emp[col.data]}</td>))}
         </tr>
        ))

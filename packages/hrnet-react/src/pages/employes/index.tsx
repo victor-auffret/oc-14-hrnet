@@ -11,7 +11,6 @@ const PageEmployes: FunctionComponent<IProps> = (props: IProps) => {
 
  useEffect(() => {
   const items = globalThis.localStorage.getItem('employees')
-  console.log("items ???", items)
   if (items != null) {
    const employees = JSON.parse(items)
    setData(employees)
@@ -35,7 +34,7 @@ const PageEmployes: FunctionComponent<IProps> = (props: IProps) => {
  return <div id="employee-div" className="container">
   <h1>Current Employees</h1>
 
-  <DataTableComponent data={data} columns={columns} />
+  <DataTableComponent data={data} columns={columns} listNbPerPage={[10, 25, 50, 100]} />
 
   <NavLink className={`error-back`} to={'/'}> Home </NavLink>
  </div>
