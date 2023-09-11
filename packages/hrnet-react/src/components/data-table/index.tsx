@@ -1,6 +1,6 @@
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useMemo, useState } from 'react';
 // import { NavLink } from 'react-router-dom';
-import { ToogleSortBtn } from "./toogle-sort";
+
 import { usePagination } from './hoock';
 
 import "./index.css"
@@ -57,7 +57,7 @@ const DataTableComponent: FunctionComponent<IProps> = (props: IProps = {
   let res = []
   for (let i = 0; i < props.data.length; i++) {
    let trouve = false
-   for (const [key, value] of Object.entries<string>(props.data[i])) {
+   for (const [_, value] of Object.entries<string>(props.data[i])) {
     if (!trouve && value.toLowerCase().includes(search.toLowerCase())) {
      res.push(props.data[i])
      trouve = true
