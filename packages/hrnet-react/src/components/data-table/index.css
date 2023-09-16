@@ -571,6 +571,12 @@ table.dataTable td {
 	height: 0;
 }
 
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 @media screen and (max-width: 767px) {
 	.dataTables_wrapper .dataTables_info,
 	.dataTables_wrapper .dataTables_paginate {

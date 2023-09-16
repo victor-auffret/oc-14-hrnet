@@ -14,7 +14,7 @@ interface IProps {
 
 const SelectStateComponent: FunctionComponent<IProps> = (props: IProps) => {
  return <select name="state" id="state" ref={props.childRef}>
-  {props.states.map(e => <option value={e.abbreviation}>{e.name}</option>)}
+  {props.states.map((e, i) => <option key={`select-pays-${i}`} value={e.abbreviation}>{e.name}</option>)}
  </select>
 }
 

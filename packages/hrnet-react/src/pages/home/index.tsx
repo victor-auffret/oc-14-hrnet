@@ -47,8 +47,16 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
         zipCode: zipCode.current?.value ?? null
       };
 
-      setEmployees(old => [...old, employee])
-      globalThis.localStorage.setItem('employees', JSON.stringify(employees));
+      const nouveauTableau = [...employees, employee]
+
+      setEmployees(nouveauTableau)
+
+      globalThis.localStorage.setItem('employees', JSON.stringify(nouveauTableau));
+
+      console.log("add employe", employee)
+
+      alert("Employee Created!")
+
 
     },
     [employees]
@@ -105,7 +113,10 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
 
       <button onClick={saveEmployee}>Save</button>
     </div>
-    <div id="confirmation" className="modal">Employee Created!</div>
+    {
+      /* <div id="confirmation" className="modal">Employee Created!</div> */
+    }
+
   </>
 }
 
