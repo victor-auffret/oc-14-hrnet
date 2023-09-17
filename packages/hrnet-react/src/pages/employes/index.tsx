@@ -1,6 +1,11 @@
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { DataTableComponent } from '../../components/data-table';
+import { DataTableComponent } from 'oc-14-hrnet-plugin-react-table';
+// ça marche
+import "../../../../../node_modules/oc-14-hrnet-plugin-react-table/dist/style.css";
+
+// ça ne marche pas 
+//import "oc-14-hrnet-plugin-react-table/style.css";
 
 interface IProps {
 }

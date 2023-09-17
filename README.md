@@ -68,3 +68,7 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 2) rempli etat 
 3) affiche etat 
 
+pour installer le pluggin
+```bash
+npm install --save git+https://github.com/victor-auffret/oc-14-hrnet-plugin-react-table.git#main -w ./packages/hrnet-react
+```
