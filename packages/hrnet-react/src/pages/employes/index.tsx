@@ -1,8 +1,9 @@
-import { FunctionComponent, useEffect, useMemo, useState } from 'react';
+import { FunctionComponent, useMemo, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { DataTableComponent } from 'oc-14-hrnet-plugin-react-table';
 // ça marche
 import "../../../../../node_modules/oc-14-hrnet-plugin-react-table/dist/style.css";
+import { EmployeContext } from '../../utils/context';
 
 // ça ne marche pas 
 //import "oc-14-hrnet-plugin-react-table/style.css";
@@ -12,15 +13,7 @@ interface IProps {
 
 const PageEmployes: FunctionComponent<IProps> = (props: IProps) => {
 
- const [data, setData] = useState([])
-
- useEffect(() => {
-  const items = globalThis.localStorage.getItem('employees')
-  if (items != null) {
-   const employees = JSON.parse(items)
-   setData(employees)
-  }
- }, [])
+ const { employes: data } = useContext(EmployeContext)
 
  const columns = useMemo(() => {
   return [

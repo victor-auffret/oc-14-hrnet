@@ -1,21 +1,49 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useCallback, useMemo, useState } from 'react';
 
 import "./index.css"
 
-interface IState {
- abbreviation: string,
- name: string
+interface IElements {
+ value: string,
+ text: string,
 }
 
 interface IProps {
- states: IState[],
+ listElements: IElements[],
+ nameId: string,
  childRef: any
 }
 
 const SelectStateComponent: FunctionComponent<IProps> = (props: IProps) => {
- return <select name="state" id="state" ref={props.childRef}>
-  {props.states.map((e, i) => <option key={`select-pays-${i}`} value={e.abbreviation}>{e.name}</option>)}
- </select>
+
+ const [currentValue, setPrivateCurrentValue] = useState(0)
+ const [open, setOpen] = useState(false)
+
+ const ToggleList = useCallback(() => setOpen(v => !v), [])
+ const setCurrentValue = (v: any) => {
+  setPrivateCurrentValue(v)
+  setOpen(false)
+ }
+
+ const List = useMemo(() => {
+  return open ? (<div className="select-fake-list">
+   {
+    props.listElements.map((e, i) => <span className="select-fake-list-item" key={`select-${e.value}-${i}`} onClick={() => setCurrentValue(i)}>{e.text}</span>)
+   }
+  </div>) : null
+ }, [open, currentValue])
+
+ return <div>
+  <select className="select-real-hide" name={props.nameId} id={props.nameId} ref={props.childRef}>
+   {props.listElements.map((e, i) => <option key={`select-${e.value}-${i}`} value={e.value}>{e.text}</option>)}
+  </select>
+  <div className="select-fake-container">
+   <div className="select-fake-current-value" onClick={ToggleList}>
+    {props.listElements[currentValue]?.text ?? ""}
+    <span className="icon-triangle" ></span>
+   </div>
+   {List}
+  </div>
+ </div>
 }
 
 export { SelectStateComponent }

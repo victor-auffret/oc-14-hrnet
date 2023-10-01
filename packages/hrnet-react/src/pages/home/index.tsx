@@ -1,14 +1,23 @@
-import { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import { FunctionComponent, useCallback, useRef, useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { SelectStateComponent } from "../../components/select-state"
 import { states } from "../../utils/states"
+import { ModaleComponent } from '../../components/modale';
+import { EmployeContext } from '../../utils/context';
+
+const DEPARTEMENTS = [
+  { value: "Sales", text: "Sales" },
+  { value: "Marketing", text: "Marketing" },
+  { value: "Engineering", text: "Engineering" },
+  { value: "Human Resources", text: "Human Resources" },
+  { value: "Legal", text: "Legal" }
+]
 
 interface IProps {
 }
 
 interface IEmployee {
-
 }
 
 const PageHome: FunctionComponent<IProps> = (props: IProps) => {
@@ -23,14 +32,9 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
   const state = useRef<HTMLSelectElement>(null)
   const zipCode = useRef<HTMLInputElement>(null)
 
-  const [employees, setEmployees] = useState<IEmployee[]>([])
+  const [hide, setHide] = useState(true)
 
-  useEffect(() => {
-    let save = globalThis.localStorage.getItem('employees')
-    if (save != null) {
-      setEmployees(JSON.parse(save))
-    }
-  }, [])
+  const { employes: employees, addEmploye } = useContext(EmployeContext)
 
   const saveEmployee = useCallback(
     () => {
@@ -47,19 +51,13 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
         zipCode: zipCode.current?.value ?? null
       };
 
-      const nouveauTableau = [...employees, employee]
+      addEmploye(employee)
 
-      setEmployees(nouveauTableau)
+      //console.log("add employe", employee)
 
-      globalThis.localStorage.setItem('employees', JSON.stringify(nouveauTableau));
-
-      console.log("add employe", employee)
-
-      alert("Employee Created!")
-
-
+      setHide(false)
     },
-    [employees]
+    [employees, setHide]
   );
 
   return <>
@@ -94,7 +92,12 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
           <input id="city" type="text" ref={city} />
 
           <label htmlFor="state">State</label>
-          <SelectStateComponent states={states} childRef={state} />
+          <SelectStateComponent nameId="state" listElements={states.map((v, i) => {
+            return {
+              value: v.abbreviation,
+              text: v.name
+            }
+          })} childRef={state} />
 
           <label htmlFor="zip-code">Zip Code</label>
           <input id="zip-code" type="number" ref={zipCode} />
@@ -102,21 +105,17 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
         </fieldset>
 
         <label htmlFor="department">Department</label>
-        <select name="department" id="department" ref={department} >
-          <option>Sales</option>
-          <option>Marketing</option>
-          <option>Engineering</option>
-          <option>Human Resources</option>
-          <option>Legal</option>
-        </select>
+        <SelectStateComponent nameId="department" listElements={DEPARTEMENTS} childRef={department} />
+
       </form>
+
+      <br />
 
       <button onClick={saveEmployee}>Save</button>
     </div>
-    {
-      /* <div id="confirmation" className="modal">Employee Created!</div> */
-    }
-
+    <ModaleComponent hidden={hide} setHidden={setHide}>
+      Employee Created!
+    </ModaleComponent>
   </>
 }
 

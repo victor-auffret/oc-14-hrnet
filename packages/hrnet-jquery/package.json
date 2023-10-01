@@ -7,7 +7,7 @@
     "dev": "live-server --open=/build"
   },
   "devDependencies": {
-    "live-server": "^1.1.0"
+    "live-server": "^1.2.2"
   },
   "author": "victor-auffret",
   "license": "MIT"
