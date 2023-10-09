@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { DataTableComponent } from 'oc-14-hrnet-plugin-react-table';
 // ça marche
 import "../../../../../node_modules/oc-14-hrnet-plugin-react-table/dist/style.css";
+// ça ne marche pas 
+// import "oc-14-hrnet-plugin-react-table/dist/style.css";
 import { EmployeContext } from '../../utils/context';
 
 // ça ne marche pas 
