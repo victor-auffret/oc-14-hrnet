@@ -8,10 +8,8 @@ import { EmployeContext } from '../../utils/context';
 // ça ne marche pas 
 //import "oc-14-hrnet-plugin-react-table/style.css";
 
-interface IProps {
-}
 
-const PageEmployes: FunctionComponent<IProps> = (props: IProps) => {
+const PageEmployes: FunctionComponent = () => {
 
  const { employes: data } = useContext(EmployeContext)
 

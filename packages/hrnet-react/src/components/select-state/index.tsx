@@ -19,8 +19,11 @@ const SelectStateComponent: FunctionComponent<IProps> = (props: IProps) => {
  const [open, setOpen] = useState(false)
 
  const ToggleList = useCallback(() => setOpen(v => !v), [])
- const setCurrentValue = (v: any) => {
+ const setCurrentValue = (v: number) => {
   setPrivateCurrentValue(v)
+  //console.log(props.listElements)
+  props.childRef.current.value = props.listElements[v].value ?? props.childRef.current.value
+  //console.log(props.childRef.current.value)
   setOpen(false)
  }
 

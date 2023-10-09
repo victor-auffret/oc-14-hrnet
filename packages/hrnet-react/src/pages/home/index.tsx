@@ -5,6 +5,7 @@ import { SelectStateComponent } from "../../components/select-state"
 import { states } from "../../utils/states"
 import { ModaleComponent } from '../../components/modale';
 import { EmployeContext } from '../../utils/context';
+import type { IEmploye } from '../../utils/context'
 
 const DEPARTEMENTS = [
   { value: "Sales", text: "Sales" },
@@ -14,13 +15,7 @@ const DEPARTEMENTS = [
   { value: "Legal", text: "Legal" }
 ]
 
-interface IProps {
-}
-
-interface IEmployee {
-}
-
-const PageHome: FunctionComponent<IProps> = (props: IProps) => {
+const PageHome: FunctionComponent = () => {
 
   const firstName = useRef<HTMLInputElement>(null)
   const lastName = useRef<HTMLInputElement>(null)
@@ -39,7 +34,7 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
   const saveEmployee = useCallback(
     () => {
 
-      const employee: IEmployee = {
+      const employee: IEmploye = {
         firstName: firstName.current?.value ?? null,
         lastName: lastName.current?.value ?? null,
         dateOfBirth: dateOfBirth.current?.value ?? null,
@@ -92,7 +87,7 @@ const PageHome: FunctionComponent<IProps> = (props: IProps) => {
           <input id="city" type="text" ref={city} />
 
           <label htmlFor="state">State</label>
-          <SelectStateComponent nameId="state" listElements={states.map((v, i) => {
+          <SelectStateComponent nameId="state" listElements={states.map((v) => {
             return {
               value: v.abbreviation,
               text: v.name

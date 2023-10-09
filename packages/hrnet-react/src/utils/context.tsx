@@ -10,7 +10,7 @@ interface IEmployeContext {
 
 const EmployeContext = createContext<IEmployeContext>({
  employes: [],
- addEmploye: (v: IEmploye) => { }
+ addEmploye: (v: IEmploye) => { console.log(v) }
 })
 
 export { EmployeContext }
