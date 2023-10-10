@@ -179,9 +179,13 @@ Le composant utilise 3 propriétés :
 ## Choix technique
 
 Pour ce projet, j'ai commencé par utiliser react-router pour le routage de l'application.
+
 J'ai ensuite remplacer la modale par un alert et le plugin jquery de l'élément date par un input de type date natif.
+
 J'ai gardé dans un premier temps un select classique non stylisé pour faire fonctionner la page home.
+
 Je me suis concentré sur l'élément data-table que j'ai ensuite sorti du projet pour l'intégré en tant que dépendance.
+
 J'ai conservé pendant un long moment le système d'enregistrement via le localStorage, je n'ai fais la transition vers un context react que tardivement ce qui m'a permi de tester l'application en conservant les données d'une session à l'autre.
 
 <p align="right">(<a href="#readme-top">haut de page</a>)</p>
