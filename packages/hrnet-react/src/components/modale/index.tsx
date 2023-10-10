@@ -8,7 +8,6 @@ interface IProps {
  setHidden: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
 const ModaleComponent: FunctionComponent<IProps> = ({ children, hidden, setHidden }: IProps) => {
 
  const handleClick = useCallback(() => {
