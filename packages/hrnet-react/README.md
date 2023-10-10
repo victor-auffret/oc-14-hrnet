@@ -70,8 +70,7 @@ Dans le projet d'origine, Jquery utilisait un plugin pour le formulaire de date 
 Cette section parle de dépendances du projet
 
 * [![React][React.js]][React-url]
-* [![React Router]](https://reactrouter.com/en/main)
-* [![ViteJS][Vite.js]][Vitejs-url]
+* [React Router](https://reactrouter.com/en/main)
 
 <p align="right">(<a href="#readme-top">haut de page</a>)</p>
 
